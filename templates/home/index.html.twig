@@ -1,20 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/vagrant/code/mediapark/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/vagrant/code/mediapark/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% block content %}
+  <div class="row">
+    <form method="post" action="/holidays">
+      <div class="form-group">
+        <label for="year-choice">Choose year:</label>
+        <select class="form-control" list="years" id="year-choice" name="year-choice">
+          <option selected disabled>Select year</option>
+          {% for i in 0 .. 20 %}
+            <option value="{{ 2015 + i }}">{{ 2015 + i }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="country-choice">Choose country:</label>
+        <input class="form-control" list="countries" id="country-choice" name="country-choice"/>
+        <datalist id="countries">
+          {% for country in countries %}
+            <option value="{{ country.fullName }}">
+            {% endfor %}
+        </datalist>
+      </div>
+      <button type="submit" class="btn btn-primary" name="submit">Get Holidays</button>
+    </form>
+  </div>
 {% endblock %}
+

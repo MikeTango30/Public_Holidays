@@ -90,17 +90,14 @@
     "egulias/email-validator": {
         "version": "2.1.15"
     },
-    "guzzle/common": {
-        "version": "v3.9.2"
+    "guzzlehttp/guzzle": {
+        "version": "6.5.2"
     },
-    "guzzle/http": {
-        "version": "v3.9.2"
+    "guzzlehttp/promises": {
+        "version": "v1.3.1"
     },
-    "guzzle/parser": {
-        "version": "v3.9.2"
-    },
-    "guzzle/stream": {
-        "version": "v3.9.2"
+    "guzzlehttp/psr7": {
+        "version": "1.6.1"
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
@@ -127,7 +124,7 @@
         "version": "2.7.0"
     },
     "php": {
-        "version": "7.4"
+        "version": "7.2"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.0.0"
@@ -147,11 +144,17 @@
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/link": {
         "version": "1.0.0"
     },
     "psr/log": {
         "version": "1.1.2"
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
@@ -535,9 +538,6 @@
     },
     "twig/twig": {
         "version": "v3.0.1"
-    },
-    "webimpress/safe-writer": {
-        "version": "2.0.0"
     },
     "webmozart/assert": {
         "version": "1.6.0"

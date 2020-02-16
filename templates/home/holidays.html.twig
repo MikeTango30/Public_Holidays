@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="row w-100">
+      <h2>Today, {{ "now"|date("m-d-Y") }} is a {{ todayType }} </h2>
+    </div>
+    <div class="row w-100">
+      <h3>In {{ year }} {{ country }} has {{ holidayCount }} public holidays:</h3>
+    </div>
+    {% for key, month in holidays %}
+      <div class="row card w-100 mb-3">
+        {#      get months name#}
+        <h5 class="card-header bg-success">{{ date('1970-' ~ key ~ '-01')|date('F') }}</h5>
+        <div class="card-body">
+          {% for holiday in month %}
+            <div class="row flex-column no-gutters mb-3">
+              <h5 class="card-title mb-2">
+                Day {{ holiday.date.day }}:
+              </h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                ({{ date( holiday.date.year ~ '-' ~ holiday.date.month ~ '-' ~ holiday.date.day)|date('l') }})
+              </h6>
+              {% for lang in holiday.name %}
+                <p class="card-text mb-1">{{ lang.lang|upper }}: {{ lang.text }}</p>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
