@@ -1,0 +1,21 @@
+body {
+  background: #F4F4EF; }
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  min-height: 100vh;
+  padding-bottom: 25px; }
+
+.page-header {
+  border-bottom: 1px solid #EFEFEF;
+  box-shadow: 3px 5px 18px #D8C3A5; }
+
+.page-footer {
+  border-top: 1px solid #20232A; }
+
+.container-fluid {
+  padding: 0; }
+
+/*# sourceMappingURL=app.css.map */
