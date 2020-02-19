@@ -20,7 +20,11 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
 
-        $countries = $this->connector->getSupportedCountries();
+        $countries = $this->connector->fetchSupportedCountries();
+
+        if (!$countries) {
+            var_dump("API call failed, database not seeded");
+        }
 
         foreach ($countries as $countryData) {
             $country = new Country();

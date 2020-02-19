@@ -18,7 +18,7 @@
         <input class="form-control" list="countries" id="country-choice" name="country-choice"/>
         <datalist id="countries">
           {% for country in countries %}
-            <option value="{{ country.fullName }}">
+            <option value="{{ country.country }}">
             {% endfor %}
         </datalist>
       </div>

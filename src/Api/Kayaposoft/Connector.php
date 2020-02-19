@@ -5,12 +5,15 @@ namespace App\Api\Kayaposoft;
 
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-use Psr\Http\Message\ResponseInterface;
 
 class Connector
 {
-    private $supportedCountries;
+    private $client;
+
+    private function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
 
     //Api url endings
     const PUBLIC_HOLIDAYS_BY_YEAR_AND_COUNTRY =
@@ -20,82 +23,64 @@ class Connector
     const IS_PUBLIC_HOLIDAY = "/?action=isWorkDay&date=%s&country=%s";
     const IS_WORKDAY = "/?action=isWorkDay&date=%s&country=%s";
 
-    public function __construct()
-    {
-        $this->supportedCountries = $this->fetchSupportedCountries();
-    }
 
-    public function getHolidaysByYearAndCountry(string $year, string $countryCode) : array
+    public function getHolidaysByYearAndCountry(string $year, string $countryCode): array
     {
-        $client = new Client;
 
         $url = sprintf($_ENV["KAYAPOSOFT_URL"] . self::PUBLIC_HOLIDAYS_BY_YEAR_AND_COUNTRY, $year, $countryCode);
 
-        $request = $client->request("GET", $url);
+        $request = $this->client->request("GET", $url);
         $response = $request->getBody()->getContents();
 
         return json_decode($response, true);
     }
 
-    public function getHolidaysByYearAndCountryAndRegion(string $year, string $countryCode, string $region) : array
+    public function getHolidaysByYearAndCountryAndRegion(string $year, string $countryCode, string $region): array
     {
-        $client = new Client;
 
         $url = sprintf($_ENV["KAYAPOSOFT_URL"] .
             self::PUBLIC_HOLIDAYS_BY_YEAR_AND_COUNTRY_AND_REGION, $year, $countryCode, $region);
 
-        $request = $client->request("GET", $url);
+        $request = $this->client->request("GET", $url);
         $response = $request->getBody()->getContents();
 
         return json_decode($response, true);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getSupportedCountries() :array
+    public function fetchSupportedCountries(): array
     {
-        return $this->supportedCountries;
-    }
 
-
-    public function fetchSupportedCountries() : array
-    {
-        $client = new Client;
-
-        $request = $client->request("GET", $_ENV["SUPPORTED_COUNTRIES_URL"]);
+        $request = $this->client->request("GET", $_ENV["SUPPORTED_COUNTRIES_URL"]);
         $response = $request->getBody()->getContents();
 
         return json_decode($response, true);
     }
 
-    public function isPublicHoliday(string $countryCode) : array
+    public function isPublicHoliday(string $countryCode): array
     {
-        $client = new Client;
 
         $url = sprintf($_ENV["KAYAPOSOFT_URL"] .
             self::IS_PUBLIC_HOLIDAY, date("d-m-Y"), $countryCode);
 
-        $request = $client->request("GET", $url);
+        $request = $this->client->request("GET", $url);
         $response = $request->getBody()->getContents();
 
         return json_decode($response, true);
     }
 
-    public function isWorkday(string $countryCode) : array
+    public function isWorkday(string $countryCode): array
     {
-        $client = new Client;
 
         $url = sprintf($_ENV["KAYAPOSOFT_URL"] .
             self::IS_WORKDAY, date("d-m-Y"), $countryCode);
 
-        $request = $client->request("GET", $url);
+        $request = $this->client->request("GET", $url);
         $response = $request->getBody()->getContents();
 
         return json_decode($response, true);
     }
 
-    public function today(string $countryCode) : string
+    public function fetchTodayType(string $countryCode): string
     {
         $today = "Workday";
         $isPublicHoliday = $this->isPublicHoliday($countryCode);
@@ -109,19 +94,5 @@ class Connector
         }
 
         return $today;
-    }
-
-    public function groupByMonth(array $holidaysByYear) : array
-    {
-        $grouped = [];
-
-        foreach ($holidaysByYear as $holiday) {
-            $grouped[$holiday['date']['month']][] = [
-                'date' => $holiday['date'],
-                'name' => $holiday['name']
-            ];
-        }
-//        dd($grouped);
-        return $grouped;
     }
 }

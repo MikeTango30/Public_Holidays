@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Country;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method Country|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,20 @@ class CountryRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Country::class);
+    }
+
+    public function findCountryCode(string $countryName): ?string
+    {
+
+        try {
+            return $this->createQueryBuilder('c')
+                ->andWhere('c.country = :val')
+                ->setParameter('val', $countryName)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            $e->getMessage();
+        }
     }
 
     // /**
