@@ -34,6 +34,11 @@ class Holidays
      */
     private $country;
 
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $regionCode;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +76,18 @@ class Holidays
     public function setCountry(?Country $country): self
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function getRegionCode(): ?string
+    {
+        return $this->regionCode;
+    }
+
+    public function setRegionCode(?string $regionCode): self
+    {
+        $this->regionCode = $regionCode;
 
         return $this;
     }

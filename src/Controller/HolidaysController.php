@@ -32,24 +32,26 @@ class HolidaysController extends AbstractController
         return $grouped;
     }
 
-    public function getHolidays(Country $country, string $year): array
+    public function getHolidays(Country $country, string $year, string $countryRegionCode = null): array
     {
 
         $publicHolidays = $this->getDoctrine()
             ->getRepository(Holidays::class)
-            ->findOneBy(["country" => $country, "year" => $year]);
+            ->findOneBy(["country" => $country, "year" => $year, "regionCode" => $countryRegionCode ?? null]);
         if ($publicHolidays) {
             $publicHolidays = $publicHolidays->getHolidays();
         }
         if (!$publicHolidays) {
-            $publicHolidays = $this->connector->getHolidaysByYearAndCountry($year, $country->getCountryCode());
-            $this->createHolidays($year, $country, $publicHolidays);
+            $publicHolidays = $countryRegionCode
+                ? $this->connector->getHolidaysByYearAndCountryAndRegion($year, $country->getCountryCode(), $countryRegionCode)
+                : $this->connector->getHolidaysByYearAndCountry($year, $country->getCountryCode());
+            $this->createHolidays($year, $country, $publicHolidays, $countryRegionCode ?? null);
         }
 
         return $publicHolidays;
     }
 
-    public function createHolidays(string $year, Country $country, array $holidaysJson)
+    public function createHolidays(string $year, Country $country, array $holidaysJson, string $countryRegionCode=null)
     {
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -57,6 +59,7 @@ class HolidaysController extends AbstractController
         $holidays = new Holidays();
         $holidays->setCountry($country);
         $holidays->setYear($year);
+        $holidays->setRegionCode($countryRegionCode);
         $holidays->setHolidays($holidaysJson);
 
         $entityManager->persist($holidays);

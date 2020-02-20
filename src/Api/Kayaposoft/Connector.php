@@ -35,12 +35,11 @@ class Connector
         return json_decode($response, true);
     }
 
-    public function getHolidaysByYearAndCountryAndRegion(string $year, string $countryCode, string $region): array
+    public function getHolidaysByYearAndCountryAndRegion(string $year, string $countryCode, string $regionCode): array
     {
 
         $url = sprintf($_ENV["KAYAPOSOFT_URL"] .
-            self::PUBLIC_HOLIDAYS_BY_YEAR_AND_COUNTRY_AND_REGION, $year, $countryCode, $region);
-
+            self::PUBLIC_HOLIDAYS_BY_YEAR_AND_COUNTRY_AND_REGION, $year, $countryCode, $regionCode);
         $request = $this->client->request("GET", $url);
         $response = $request->getBody()->getContents();
 

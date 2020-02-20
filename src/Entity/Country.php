@@ -31,7 +31,12 @@ class Country
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $country_code;
+    private $countryCode;
+
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $regions = [];
 
     public function __construct()
     {
@@ -88,12 +93,24 @@ class Country
 
     public function getCountryCode(): ?string
     {
-        return $this->country_code;
+        return $this->countryCode;
     }
 
-    public function setCountryCode(string $country_code): self
+    public function setCountryCode(string $countryCode): self
     {
-        $this->country_code = $country_code;
+        $this->countryCode = $countryCode;
+
+        return $this;
+    }
+
+    public function getRegions(): ?array
+    {
+        return $this->regions;
+    }
+
+    public function setRegions(?array $regions): self
+    {
+        $this->regions = $regions;
 
         return $this;
     }

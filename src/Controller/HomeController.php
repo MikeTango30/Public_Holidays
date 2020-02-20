@@ -12,7 +12,6 @@ class HomeController extends AbstractController
 
     public function index()
     {
-
         $countries = $this->getDoctrine()
             ->getRepository(Country::class)
             ->findAll();
@@ -27,13 +26,13 @@ class HomeController extends AbstractController
 
         $year = $request->get("year-choice");
         $countryName = $request->get("country-choice");
-
+        $countryRegionCode = $request->get("region-choice");
+//        dd($request);
         $country = $countryController->getCountry($countryName);
-        $publicHolidays = $holidaysController->getHolidays($country, $year);
+        $publicHolidays = $holidaysController->getHolidays($country, $year, $countryRegionCode);
 
         $holidayCount = $holidaysController->countHolidays($publicHolidays);
         $todayType = $countryController->getTodayType($country->getCountryCode());
-
         $groupedByMonthHolidays = $holidaysController->groupByMonth($publicHolidays);
 
         return $this->render('home/holidays.html.twig', [

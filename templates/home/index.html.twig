@@ -18,10 +18,23 @@
         <input class="form-control" list="countries" id="country-choice" name="country-choice"/>
         <datalist id="countries">
           {% for country in countries %}
-            <option value="{{ country.country }}" data-country="{{ country.country }}">
+          <option value="{{ country.country }}" data-country-code="{{ country.countryCode }}">
             {% endfor %}
         </datalist>
       </div>
+      {% for country in countries %}
+        {% if country.regions %}
+          <div class="form-group regions regions-{{ country.countryCode }} d-none">
+            <label for="region-choice">Choose region in {{ country.country }}:</label>
+            <select class="form-control" id="region-choice" name="region-choice">
+              <option value="" selected disabled>Select Region</option>
+              {% for region in country.regions %}
+                <option value="{{ region.shortCode|raw }}">{{ region.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+      {% endfor %}
       <button type="submit" class="btn btn-primary" name="submit">Get Holidays</button>
     </form>
   </div>
