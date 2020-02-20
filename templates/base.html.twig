@@ -15,8 +15,13 @@
   <div class="page-wrapper">
     <div class="container-fluid">
       <header class="page-header">
-        <div class="row no-gutters justify-content-center">
-          <h2>Public country holidays</h2>
+        <div class="row w-100 no-gutters justify-content-center py-4">
+          <h2>Public country holidays {%  if country is defined %} in {{ country }}{% endif %}</h2>
+          {% if todayType is defined %}
+            <div class="row w-100 justify-content-center">
+              <p>Today, {{ "now"|date("m-d-Y") }} is a {{ todayType }} </p>
+            </div>
+          {% endif %}
         </div>
       </header>
       <div class="content container">
@@ -24,7 +29,7 @@
 
         {% endblock %}
       </div>
-      <footer class="page-footer fixed-bottom">
+      <footer class="page-footer">
         <div class="row no-gutters pl-5">
           <em>Training assignment for a PHP developer</em>
         </div>

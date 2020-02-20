@@ -3,16 +3,16 @@
 
 {% block content %}
   <div class="row">
-    <div class="row w-100">
-      <h2>Today, {{ "now"|date("m-d-Y") }} is a {{ todayType }} </h2>
+    <div class="row w-100 my-3 flex-column search-info">
+      <div>Year: <em>{{ year }}</em></div>
+      <div>Country: <em>{{ country }}</em></div>
+      <div>{% if region is defined %} Region: <em>{{ region }}</em>{% endif %}</div>
+      <div>Holiday Count: <em>{{ holidayCount }} public holidays</em></div>
     </div>
-    <div class="row w-100">
-      <h3>In {{ year }} {{ country }} has {{ holidayCount }} public holidays:</h3>
-    </div>
+    <h5>Search results:</h5>
     {% for key, month in holidays %}
       <div class="row card w-100 mb-3">
-        {#      get months name#}
-        <h5 class="card-header bg-success">{{ date('1970-' ~ key ~ '-01')|date('F') }}</h5>
+        <h5 class="card-header bg-success">{{ date('1970-' ~ key ~ '-01')|date('F') }}</h5> {# get month's name #}
         <div class="card-body">
           {% for holiday in month %}
             <div class="row flex-column no-gutters mb-3">

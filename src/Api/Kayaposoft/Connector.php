@@ -20,7 +20,7 @@ class Connector
         "/?action=getHolidaysForYear&year=%s&country=%s&holidayType=public_holiday";
     const PUBLIC_HOLIDAYS_BY_YEAR_AND_COUNTRY_AND_REGION =
         "/?action=getHolidaysForYear&year=%s&country=%s&holidayType=public_holiday&region=%s";
-    const IS_PUBLIC_HOLIDAY = "/?action=isWorkDay&date=%s&country=%s";
+    const IS_PUBLIC_HOLIDAY = "/?action=isPublicHoliday&date=%s&country=%s";
     const IS_WORKDAY = "/?action=isWorkDay&date=%s&country=%s";
 
 
@@ -88,7 +88,7 @@ class Connector
         if (!$isPublicHoliday && !$isWorkday) {
             $today = "Free day";
         }
-        if ($isPublicHoliday) {
+        if ($isPublicHoliday === true) {
             $today = "Holiday";
         }
 

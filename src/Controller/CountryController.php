@@ -32,6 +32,18 @@ class CountryController extends AbstractController
         return $country;
     }
 
+    public function getRegion(string $countryRegionCode, Country $country): ?string {
+        $region = null;
+
+        foreach ($country->getRegions() as $regionData) {
+            if ($countryRegionCode === $regionData["shortCode"]) {
+                $region = $regionData["name"];
+            }
+        }
+
+        return $region;
+    }
+
     public function getTodayType(string $countryCode)
     {
 

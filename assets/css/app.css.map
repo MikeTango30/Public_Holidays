@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAEA,IAAK;EACD,UAAU,ECFU,OAAO;;ADK/B,aAAc;EACV,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,MAAM;EACtB,SAAS,EAAE,MAAM;EACjB,UAAU,EAAE,KAAK;EACjB,cAAc,EAAC,IAAI;;AAGvB,YAAa;EACT,aAAa,EAAE,iBAA4B;EAC3C,UAAU,EAAE,oBAAiC;;AAIjD,YAAa;EACT,UAAU,EAAE,iBAAqB;;AAGrC,gBAAiB;EACb,OAAO,EAAE,CAAC",
-"sources": ["../sass/components/_holidays.scss","../sass/variables/_colors.scss"],
-"names": [],
-"file": "app.css"
-}

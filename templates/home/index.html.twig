@@ -3,6 +3,15 @@
 
 {% block content %}
   <div class="row">
+    {% if violations is not empty %}
+      <div class="w-100 alert alert-danger violations" role="alert">
+        <ul>
+        {% for violation in violations %}
+          <li>{{ violation.message }}</li>
+        {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
     <form method="post" class="holidays" action="/holidays">
       <div class="form-group">
         <label for="year-choice">Choose year:</label>

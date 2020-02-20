@@ -3,7 +3,7 @@
 (function () {
     // suggestion from stack overflow to reload page on navigating back in browser
     window.addEventListener( "pageshow", function ( event ) {
-        var historyTraversal = event.persisted ||
+        let historyTraversal = event.persisted ||
             ( typeof window.performance != "undefined" &&
                 window.performance.navigation.type === 2 );
         if ( historyTraversal ) {
@@ -19,14 +19,17 @@
             if (element.value === country.value) {
                 const region = document.querySelector('.regions-' + element.dataset.countryCode);
                 const regions = document.querySelectorAll('.regions');
+                const regionSelect = document.querySelector('#region-choice');
+                console.log(regionSelect)
                 regions.forEach(region => {
                     if (!region.classList.contains('d-none')) {
                         region.classList.toggle('d-none');
+                        regionSelect.required = false;
                     }
                 });
                 if (region) {
-
                     region.classList.toggle('d-none');
+                    regionSelect.required = true;
                 }
             }
         })

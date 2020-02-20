@@ -1,6 +1,9 @@
 index:
     path: /
     controller: App\Controller\HomeController::index
+errors:
+    path: /errors
+    controller: App\Controller\HomeController::showErrors
 api_call:
     path: /holidays
     controller: App\Controller\HomeController::showHolidays
