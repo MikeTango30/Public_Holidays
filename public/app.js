@@ -1,6 +1,31 @@
 'use strict';
 
 (function () {
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let countries = document.querySelectorAll('[data-country]');
+        // for (let country of countries.dataset.countries) {
+        const entryIds =
+            Array.from(countries).map(
+                item => item.dataset.country
+            );
+        console.log(entryIds)
+        // }
+    });
+
+    let country = document.querySelector('#country-choice');
+    country.addEventListener('input', function () {
+        let opts = document.querySelector('#countries').childNodes;
+        opts.forEach(element => {
+            if (element.value === country.value) {
+                console.log(country.value);
+            }
+        }
+    )
+    });
+
+
     class Region {
         constructor(region) {
             this.region = region;
@@ -27,7 +52,7 @@
             this.select.setAttribute('list', 'countries');
             this.select.setAttribute('id', 'region-choice');
             this.select.setAttribute('name', 'region-choice');
-            for(let region of regionList) {
+            for (let region of regionList) {
                 this.option = document.createElement('option');
                 this.option.setAttribute('value', region["regionCode"]);
                 this.option.textContent = region["regionName"];
