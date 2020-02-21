@@ -28,8 +28,8 @@
                     }
                 });
                 if (region) {
-                    region.classList.toggle('d-none');
                     regionSelect.required = true;
+                    region.classList.toggle('d-none');
                 }
             }
         })

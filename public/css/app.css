@@ -1,5 +1,12 @@
 body {
+  color: #20232A;
   background: #F4F4EF; }
+
+a {
+  color: #20232A; }
+  a:hover {
+    color: #20232A;
+    text-decoration: none; }
 
 .page-wrapper {
   position: relative;

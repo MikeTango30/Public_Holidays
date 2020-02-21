@@ -1,7 +1,16 @@
 @import "../variables/colors";
 // Colorings
 body {
+    color: $color__ink;
     background: $color__paper;
+}
+
+a {
+    color: $color__ink;
+    &:hover {
+        color: $color__ink;
+        text-decoration: none;
+    }
 }
 
 .page-wrapper {
