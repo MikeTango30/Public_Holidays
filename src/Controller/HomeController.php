@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Country;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -44,7 +45,7 @@ class HomeController extends AbstractController
         $country = $countryController->getCountry($countryName);
         $region = $countryRegionCode ? $countryController->getRegion($countryRegionCode, $country) : "";
         $publicHolidays = $holidaysController->getHolidays($country, $year, $countryRegionCode);
-
+        $maxNonWorkdaysInARow = $this->getMaxNonWorkdaysInARow($publicHolidays);
         $holidayCount = $holidaysController->countHolidays($publicHolidays);
         $todayType = $countryController->getTodayType($country->getCountryCode());
         $groupedByMonthHolidays = $holidaysController->groupByMonth($publicHolidays);
@@ -88,15 +89,42 @@ class HomeController extends AbstractController
             $violations = $validator->validate($countryRegionCode, $stringConstraint);
         }
 
-
-
         return $violations;
     }
 
     public function getMaxNonWorkdaysInARow(array $holidays)
     {
 
-        $count = 0;
-        //TODO
+        $tempDates = [];
+        $streaks = [];
+        $lastDate = null;
+
+        foreach ($holidays as $holidayDate) {
+            $date = new DateTime($holidayDate['date']['year'].'-'
+                .$holidayDate['date']['month'].'-'
+                .$holidayDate['date']['day']);
+            // start first streak
+            if(empty($tempDates)) {
+                $tempDates[] = $date;
+            } else {
+                $interval = $date->diff($lastDate);
+//                $holidayDate['dayOfWeek'];
+                // add to streak or store streaks and start new one
+                if ($interval->days === 1) {
+                    $tempDates[] = $date;
+                } else {
+                    $streaks[] = $tempDates;
+                    $tempDates = [$date];
+                }
+            }
+            $lastDate = $date;
+        }
+        $streaks[] = $tempDates;
+
+        dd($streaks);
     }
 }
+//            $holidayDate['day'];
+//            $holidayDate['month'];
+//            $holidayDate['dayOfWeek'];
+//            $holidayDate['year'];
