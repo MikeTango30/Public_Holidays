@@ -6,6 +6,7 @@ use App\Entity\Country;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
@@ -27,14 +28,41 @@ class HomeController extends AbstractController
 
     public function showHolidays(Request $request,
                                  HolidaysController $holidaysController,
-                                 CountryController $countryController,
-                                 ValidatorInterface $validator)
+                                 CountryController $countryController)
     {
         $year = $request->get("year-choice");
         $countryName = $request->get("country-choice");
         $countryRegionCode = $request->get("region-choice");
 
         // validate input
+        $violations = $this->validateInput($year, $countryName, $countryRegionCode);
+        if ($violations->count() > 0) {
+            return $this->index($violations);
+        }
+
+
+        $country = $countryController->getCountry($countryName);
+        $region = $countryRegionCode ? $countryController->getRegion($countryRegionCode, $country) : "";
+        $publicHolidays = $holidaysController->getHolidays($country, $year, $countryRegionCode);
+
+        $holidayCount = $holidaysController->countHolidays($publicHolidays);
+        $todayType = $countryController->getTodayType($country->getCountryCode());
+        $groupedByMonthHolidays = $holidaysController->groupByMonth($publicHolidays);
+
+        return $this->render('holidays/holidays.html.twig', [
+            'holidays' => $groupedByMonthHolidays,
+            'todayType' => $todayType,
+            'country' => $countryName,
+            'year' => $year,
+            'region' => $region,
+            'holidayCount' => $holidayCount
+        ]);
+    }
+
+    public function validateInput(string $year = null, string $countryName = null, string $countryRegionCode = null)
+    {
+        $validator = Validation::createValidator();
+
         $input = [
             'year' => $year,
             'countryName' => $countryName,
@@ -60,27 +88,9 @@ class HomeController extends AbstractController
             $violations = $validator->validate($countryRegionCode, $stringConstraint);
         }
 
-        if($violations->count() > 0) {
-            return $this->index($violations);
-        }
 
 
-        $country = $countryController->getCountry($countryName);
-        $region = $countryRegionCode ? $countryController->getRegion($countryRegionCode, $country) : "";
-        $publicHolidays = $holidaysController->getHolidays($country, $year, $countryRegionCode);
-
-        $holidayCount = $holidaysController->countHolidays($publicHolidays);
-        $todayType = $countryController->getTodayType($country->getCountryCode());
-        $groupedByMonthHolidays = $holidaysController->groupByMonth($publicHolidays);
-
-        return $this->render('holidays/holidays.html.twig', [
-            'holidays' => $groupedByMonthHolidays,
-            'todayType' => $todayType,
-            'country' => $countryName,
-            'year' => $year,
-            'region' => $region,
-            'holidayCount' => $holidayCount
-        ]);
+        return $violations;
     }
 
     public function getMaxNonWorkdaysInARow(array $holidays)
