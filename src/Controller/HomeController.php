@@ -55,7 +55,8 @@ class HomeController extends AbstractController
             'country' => $countryName,
             'year' => $year,
             'region' => $region,
-            'holidayCount' => $holidayCount
+            'holidayCount' => $holidayCount,
+            'maxNonWorkdaysInARow' => $maxNonWorkdaysInARow
         ]);
     }
 
@@ -91,23 +92,25 @@ class HomeController extends AbstractController
         return $violations;
     }
 
-    public function getMaxNonWorkdaysInARow(array $holidays)
+    public function getMaxNonWorkdaysInARow(array $holidays): int
     {
 
         $tempDates = [];
         $streaks = [];
         $lastDate = null;
 
+        // aggregate dates from holidays
         foreach ($holidays as $holidayDate) {
             $date = new DateTime($holidayDate['date']['year'].'-'
                 .$holidayDate['date']['month'].'-'
                 .$holidayDate['date']['day']);
+
             // start first streak
             if(empty($tempDates)) {
                 $tempDates[] = $date;
             } else {
                 $interval = $date->diff($lastDate);
-//                $holidayDate['dayOfWeek'];
+
                 // add to streak or store streaks and start new one
                 if ($interval->days === 1) {
                     $tempDates[] = $date;
@@ -120,10 +123,35 @@ class HomeController extends AbstractController
         }
         $streaks[] = $tempDates;
 
-        dd($streaks);
+        // add weekends
+        $holidaysAndWeekendsStreaks = [];
+        foreach ($streaks as $streak) {
+            $inStreakCount = count($streak);
+            if ($streak[0]->format('N') === '1' || end($streak)->format('N') === '5') {
+                $inStreakCount += 2; //weekend
+            }
+            $holidaysAndWeekendsStreaks[] = [
+                "dates" => $streak,
+                "streakCount" => $inStreakCount
+            ];
+        }
+
+        // get longest streaks from today
+        $streaksFromToday = [];
+        $today = new DateTime();
+        foreach ($holidaysAndWeekendsStreaks as $holidaysAndWeekendsStreak) {
+            if (end($holidaysAndWeekendsStreak["dates"]) > $today) {
+                $streaksFromToday[] = $holidaysAndWeekendsStreak;
+            }
+        }
+
+        $maxNonWorkdaysInARow = 0;
+        foreach ($streaksFromToday as $streakFromToday) {
+            if($streakFromToday["streakCount"] > $maxNonWorkdaysInARow) {
+                $maxNonWorkdaysInARow = $streakFromToday["streakCount"];
+            }
+        }
+
+        return $maxNonWorkdaysInARow;
     }
 }
-//            $holidayDate['day'];
-//            $holidayDate['month'];
-//            $holidayDate['dayOfWeek'];
-//            $holidayDate['year'];

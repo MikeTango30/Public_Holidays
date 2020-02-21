@@ -6,8 +6,9 @@
     <div class="row w-100 my-3 flex-column search-info">
       <div>Year: <em>{{ year }}</em></div>
       <div>Country: <em>{{ country }}</em></div>
-      <div>{% if region is defined %} Region: <em>{{ region }}</em>{% endif %}</div>
+      <div>{% if region is not empty %} Region: <em>{{ region }}</em>{% endif %}</div>
       <div>Holiday Count: <em>{{ holidayCount }} public holidays</em></div>
+      <div>Maximum non work days in a row: <em>{{ maxNonWorkdaysInARow }} days</em></div>
     </div>
     <h5>Search results:</h5>
     {% for key, month in holidays %}
