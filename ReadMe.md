@@ -4,7 +4,7 @@
 [*Here*](https://pastebin.com/N516PwQd)
 
 ##### App deployed at:
-[*Here*](https://salty-reaches-54024.herokuapp.com/)
+[*Here*](https://tarutis-holidays.herokuapp.com/)
 
 ##### Usage:
 On index page:
