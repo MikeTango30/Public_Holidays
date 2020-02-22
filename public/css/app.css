@@ -21,11 +21,11 @@ a {
   box-shadow: 3px 5px 18px #D8C3A5; }
 
 .content {
-  margin: 0 1rem;
+  margin: 1rem 1rem 0;
   padding-bottom: 2.5rem; }
   @media (min-width: 576px) {
     .content {
-      margin: 0 auto; } }
+      margin: 1rem auto 0; } }
   .content .violations {
     margin: 2rem 0 .5rem 0; }
   .content .search-info {
