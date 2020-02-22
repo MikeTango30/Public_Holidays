@@ -28,6 +28,10 @@ a {
 }
 
 .content {
+    margin: 0 1rem;
+    @media (min-width: 576px) {
+        margin: 0 auto;
+    }
     .violations {
         margin: 2rem 0 .5rem 0;
     }
