@@ -20,13 +20,13 @@ class CountryController extends AbstractController
     public function getCountry(string $countryName): ?Country
     {
 
+
         $country = $this->getDoctrine()
             ->getRepository(Country::class)
             ->findOneBy(["country" => $countryName]);
         if (!$country) {
-            throw $this->createNotFoundException(
-                'No country found named ' . $countryName
-            );
+
+            return null;
         }
 
         return $country;

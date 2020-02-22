@@ -41,8 +41,13 @@ class HomeController extends AbstractController
             return $this->index($violations);
         }
 
-
         $country = $countryController->getCountry($countryName);
+        if (!$country) {
+            return $this->render('errors/errors.html.twig', [
+                'errors' => "There is no country named: ".$countryName
+            ]);
+        }
+
         $region = $countryRegionCode ? $countryController->getRegion($countryRegionCode, $country) : "";
         $todayType = $countryController->getTodayType($country->getCountryCode());
         if (isset($todayType['error'])) {
@@ -50,13 +55,14 @@ class HomeController extends AbstractController
                 'errors' => $todayType['error']
             ]);
         }
+
         $publicHolidays = $holidaysController->getHolidays($country, $year, $countryRegionCode);
         if (isset($publicHolidays['error'])) {
             return $this->render('errors/errors.html.twig', [
                 'errors' => $publicHolidays['error']
             ]);
         }
-//        var_dump($publicHolidays);
+
         $maxNonWorkdaysInARow = $this->getMaxNonWorkdaysInARow($publicHolidays);
         $holidayCount = $holidaysController->countHolidays($publicHolidays);
         $groupedByMonthHolidays = $holidaysController->groupByMonth($publicHolidays);
