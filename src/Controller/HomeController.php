@@ -44,7 +44,7 @@ class HomeController extends AbstractController
         $country = $countryController->getCountry($countryName);
         if (!$country) {
             return $this->render('errors/errors.html.twig', [
-                'errors' => "There is no country named: ".$countryName
+                'errors' => "Country ".$countryName ."is not supported. Choose another."
             ]);
         }
 
