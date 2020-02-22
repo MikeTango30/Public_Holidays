@@ -81,15 +81,16 @@ class Connector
 
     public function fetchTodayType(string $countryCode): string
     {
-        $today = "Workday";
         $isPublicHoliday = $this->isPublicHoliday($countryCode);
         $isWorkday = $this->isWorkday($countryCode);
 
-        if (!$isPublicHoliday && !$isWorkday) {
+        $today = "Workday";
+
+        if (!$isWorkday['isWorkDay']) {
             $today = "Free day";
         }
-        if ($isPublicHoliday === true) {
-            $today = "Holiday";
+        if ($isPublicHoliday['isPublicHoliday']) {
+            $today = "Public holiday";
         }
 
         return $today;

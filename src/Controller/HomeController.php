@@ -37,6 +37,7 @@ class HomeController extends AbstractController
         // validate input
         $violations = $this->validateInput($year, $countryName, $countryRegionCode);
         if ($violations->count() > 0) {
+
             return $this->index($violations);
         }
 

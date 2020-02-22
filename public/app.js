@@ -20,7 +20,6 @@
                 const region = document.querySelector('.regions-' + element.dataset.countryCode);
                 const regions = document.querySelectorAll('.regions');
                 const regionSelect = document.querySelector('#region-choice');
-                console.log(regionSelect)
                 regions.forEach(region => {
                     if (!region.classList.contains('d-none')) {
                         region.classList.toggle('d-none');
