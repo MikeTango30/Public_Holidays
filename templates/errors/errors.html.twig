@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+
+{% block content %}
+  <div class="row">
+  {% if errors is not empty %}
+    <div class="w-100 alert alert-danger violations" role="alert">
+      <h5>{{ errors }}</h5>
+    </div>
+  {% endif %}
+  </div>
+{% endblock %}

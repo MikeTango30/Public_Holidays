@@ -5,6 +5,7 @@ namespace App\Api\Kayaposoft;
 
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class Connector
 {
@@ -29,10 +30,17 @@ class Connector
 
         $url = sprintf($_ENV["KAYAPOSOFT_URL"] . self::PUBLIC_HOLIDAYS_BY_YEAR_AND_COUNTRY, $year, $countryCode);
 
-        $request = $this->client->request("GET", $url);
-        $response = $request->getBody()->getContents();
+        try{
+            $request = $this->client->request("GET", $url);
+            $response = $request->getBody()->getContents();
+            $response = json_decode($response, true);
+        } catch(RequestException $e){
+            $response = [
+                'error' => "Whoops! Looks like you reaaaally looking for holidays. Try again a few seconds later"
+            ];
+        }
 
-        return json_decode($response, true);
+        return $response;
     }
 
     public function getHolidaysByYearAndCountryAndRegion(string $year, string $countryCode, string $regionCode): array
@@ -40,19 +48,36 @@ class Connector
 
         $url = sprintf($_ENV["KAYAPOSOFT_URL"] .
             self::PUBLIC_HOLIDAYS_BY_YEAR_AND_COUNTRY_AND_REGION, $year, $countryCode, $regionCode);
-        $request = $this->client->request("GET", $url);
-        $response = $request->getBody()->getContents();
 
-        return json_decode($response, true);
+        try{
+            $request = $this->client->request("GET", $url);
+            $response = $request->getBody()->getContents();
+            $response = json_decode($response, true);
+        } catch(RequestException $e){
+            $response = [
+                'error' => "Whoops! Looks like you reaaaally looking for holidays. Try again a few seconds later"
+            ];
+        }
+
+        return $response;
     }
 
     public function fetchSupportedCountries(): array
     {
 
-        $request = $this->client->request("GET", $_ENV["SUPPORTED_COUNTRIES_URL"]);
-        $response = $request->getBody()->getContents();
+        $url = $_ENV["SUPPORTED_COUNTRIES_URL"];
 
-        return json_decode($response, true);
+        try{
+            $request = $this->client->request("GET", $url);
+            $response = $request->getBody()->getContents();
+            $response = json_decode($response, true);
+        } catch(RequestException $e){
+            $response = [
+                'error' => "Whoops! Looks like you reaaaally looking for holidays. Try again a few seconds later"
+            ];
+        }
+
+        return $response;
     }
 
     public function isPublicHoliday(string $countryCode): array
@@ -61,10 +86,17 @@ class Connector
         $url = sprintf($_ENV["KAYAPOSOFT_URL"] .
             self::IS_PUBLIC_HOLIDAY, date("d-m-Y"), $countryCode);
 
-        $request = $this->client->request("GET", $url);
-        $response = $request->getBody()->getContents();
+        try{
+            $request = $this->client->request("GET", $url);
+            $response = $request->getBody()->getContents();
+            $response = json_decode($response, true);
+        } catch(RequestException $e){
+            $response = [
+                'error' => "Whoops! Looks like you reaaaally looking for holidays. Try again a few seconds later"
+            ];
+        }
 
-        return json_decode($response, true);
+        return $response;
     }
 
     public function isWorkday(string $countryCode): array
@@ -73,24 +105,51 @@ class Connector
         $url = sprintf($_ENV["KAYAPOSOFT_URL"] .
             self::IS_WORKDAY, date("d-m-Y"), $countryCode);
 
-        $request = $this->client->request("GET", $url);
-        $response = $request->getBody()->getContents();
+        try{
+            $request = $this->client->request("GET", $url);
+            $response = $request->getBody()->getContents();
+            $response = json_decode($response, true);
+        } catch(RequestException $e){
+            $response = [
+                'error' => "Whoops! Looks like you reaaaally looking for holidays. Try again a few seconds later"
+            ];
+        }
 
-        return json_decode($response, true);
+        return $response;
     }
 
-    public function fetchTodayType(string $countryCode): string
+    public function fetchTodayType(string $countryCode): array
     {
         $isPublicHoliday = $this->isPublicHoliday($countryCode);
-        $isWorkday = $this->isWorkday($countryCode);
+        if (isset($isPublicHoliday['error'])) {
+            $today = [
+                'error' => $isPublicHoliday['error']
+            ];
 
-        $today = "Workday";
+            return $today;
+        }
+        $isWorkday = $this->isWorkday($countryCode);
+        if (isset($isWorkday['error'])) {
+            $today = [
+                'error' => $isWorkday['error']
+            ];
+
+            return $today;
+        }
+
+        $today = [
+            'today' => "Workday"
+        ];
 
         if (!$isWorkday['isWorkDay']) {
-            $today = "Free day";
+            $today = [
+                'today' => "Free Day"
+            ];
         }
         if ($isPublicHoliday['isPublicHoliday']) {
-            $today = "Public holiday";
+            $today = [
+                'today' => "Public Holiday"
+            ];
         }
 
         return $today;

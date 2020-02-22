@@ -44,15 +44,26 @@ class HomeController extends AbstractController
 
         $country = $countryController->getCountry($countryName);
         $region = $countryRegionCode ? $countryController->getRegion($countryRegionCode, $country) : "";
+        $todayType = $countryController->getTodayType($country->getCountryCode());
+        if (isset($todayType['error'])) {
+            return $this->render('errors/errors.html.twig', [
+                'errors' => $todayType['error']
+            ]);
+        }
         $publicHolidays = $holidaysController->getHolidays($country, $year, $countryRegionCode);
+        if (isset($publicHolidays['error'])) {
+            return $this->render('errors/errors.html.twig', [
+                'errors' => $publicHolidays['error']
+            ]);
+        }
+//        var_dump($publicHolidays);
         $maxNonWorkdaysInARow = $this->getMaxNonWorkdaysInARow($publicHolidays);
         $holidayCount = $holidaysController->countHolidays($publicHolidays);
-        $todayType = $countryController->getTodayType($country->getCountryCode());
         $groupedByMonthHolidays = $holidaysController->groupByMonth($publicHolidays);
 
         return $this->render('holidays/holidays.html.twig', [
             'holidays' => $groupedByMonthHolidays,
-            'todayType' => $todayType,
+            'todayType' => $todayType['today'],
             'country' => $countryName,
             'year' => $year,
             'region' => $region,
